@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:app/data/model/Repo.dart';
+import 'package:app/data/model/repo.dart';
 import 'package:app/util/constants.dart';
 
 class RestManager {

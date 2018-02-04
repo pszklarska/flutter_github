@@ -1,4 +1,4 @@
-import 'package:app/data/model/Repo.dart';
+import 'package:app/data/model/repo.dart';
 import 'package:app/data/rest_manager.dart';
 import 'package:app/util/strings.dart';
 import 'package:flutter/material.dart';
