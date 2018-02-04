@@ -63,6 +63,13 @@ class AppScreen extends StatelessWidget {
   Widget _buildRepoTile(BuildContext context, Repo repo) {
     return new ListTile(
       title: new Text(repo.name),
+      subtitle: repo.description != null
+          ? new Text(
+              repo.description,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
       leading: new CircleAvatar(
         child: new Text(repo.language[0]),
       ),
