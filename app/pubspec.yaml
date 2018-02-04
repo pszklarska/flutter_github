@@ -1,5 +1,5 @@
 name: app
-description: A new Flutter project.
+description: A sample Flutter project using GitHub API
 
 dependencies:
   flutter:

@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:app/data/model/Repo.dart';
+import 'package:app/util/constants.dart';
 
 class RestManager {
   var httpClient = new HttpClient();
 
   Future<List<Repo>> loadRepositories() async {
-    var uri =
-        new Uri.https("api.github.com", "/users/pszklarska/repos");
+    var uri = new Uri.https(Constants.API_BASE_URL, Constants.API_GET_REPO_URL);
     var request = await httpClient.getUrl(uri);
     var response = await request.close();
     var json = await response.transform(UTF8.decoder).join();

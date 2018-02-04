@@ -1,6 +1,6 @@
 import 'package:app/data/model/Repo.dart';
 import 'package:app/data/rest_manager.dart';
-import 'package:app/strings.dart';
+import 'package:app/util/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -14,7 +14,7 @@ class FlutterGitHubApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: "FlutterGitHubApp",
+      title: Strings.APP_NAME,
       home: new AppScreen(),
     );
   }
