@@ -27,13 +27,28 @@ class AppScreen extends StatelessWidget {
         appBar: new AppBar(
           title: new Text(Strings.APP_NAME),
         ),
-        body: new FutureBuilder(
-            future: restManager.loadRepositories(),
-            builder: _buildWidgetFromRepoListState));
+        body: new AppScreenBody());
   }
+}
 
-  Widget _buildWidgetFromRepoListState(
-      BuildContext context, AsyncSnapshot<List<Repo>> snapshot) {
+class AppScreenBody extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new FutureBuilder(
+        future: restManager.loadRepositories(),
+        builder: (BuildContext context, AsyncSnapshot<List<Repo>> snapshot) {
+          return new AppScreenList(snapshot);
+        });
+  }
+}
+
+class AppScreenList extends StatelessWidget {
+  final AsyncSnapshot<List<Repo>> snapshot;
+
+  AppScreenList(this.snapshot);
+
+  @override
+  Widget build(BuildContext context) {
     switch (snapshot.connectionState) {
       case ConnectionState.none:
       case ConnectionState.waiting:
@@ -42,7 +57,7 @@ class AppScreen extends StatelessWidget {
         if (snapshot.hasError) {
           return _buildError();
         } else {
-          return _buildRepoList(context, snapshot);
+          return new AppRepoList(snapshot.data);
         }
     }
   }
@@ -50,17 +65,28 @@ class AppScreen extends StatelessWidget {
   Center _buildProgress() => new Center(child: new CircularProgressIndicator());
 
   Center _buildError() => new Center(child: new Icon(Icons.error));
+}
 
-  Widget _buildRepoList(
-      BuildContext context, AsyncSnapshot<List<Repo>> snapshot) {
-    List<Repo> repoList = snapshot.data;
+class AppRepoList extends StatelessWidget {
+  final List<Repo> repoList;
+
+  AppRepoList(this.repoList);
+
+  @override
+  Widget build(BuildContext context) {
     return new ListView.builder(
-        itemBuilder: (context, index) =>
-            _buildRepoTile(context, snapshot.data[index]),
+        itemBuilder: (context, index) => new AppRepoListTile(repoList[index]),
         itemCount: repoList.length);
   }
+}
 
-  Widget _buildRepoTile(BuildContext context, Repo repo) {
+class AppRepoListTile extends StatelessWidget {
+  final Repo repo;
+
+  AppRepoListTile(this.repo);
+
+  @override
+  Widget build(BuildContext context) {
     return new ListTile(
       title: new Text(repo.name),
       subtitle: repo.description != null
