@@ -1,4 +1,5 @@
 import 'package:app/data/model/repo.dart';
+import 'package:app/data/model/user.dart';
 import 'package:app/data/rest_manager.dart';
 import 'package:app/util/strings.dart';
 import 'package:flutter/material.dart';
@@ -34,11 +35,86 @@ class AppScreen extends StatelessWidget {
 class AppScreenBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new FutureBuilder(
-        future: restManager.loadRepositories(),
-        builder: (BuildContext context, AsyncSnapshot<List<Repo>> snapshot) {
-          return new AppScreenList(snapshot);
-        });
+    return new Column(
+      children: <Widget>[
+        new FutureBuilder(
+          future: restManager.loadUser(),
+          builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+            return new ProfileHeader(snapshot);
+          },
+        ),
+        new Divider(
+          height: 3.0,
+        ),
+        new FutureBuilder(
+            future: restManager.loadRepositories(),
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Repo>> snapshot) {
+              return new AppScreenList(snapshot);
+            }),
+      ],
+    );
+  }
+}
+
+class ProfileHeader extends StatelessWidget {
+  final AsyncSnapshot<User> snapshot;
+
+  ProfileHeader(this.snapshot);
+
+  @override
+  Widget build(BuildContext context) {
+    switch (snapshot.connectionState) {
+      case ConnectionState.active:
+      case ConnectionState.done:
+        User user = snapshot.data;
+        return _buildUserHeader(context, user);
+      default:
+        return new Container();
+    }
+  }
+
+  Widget _buildUserHeader(BuildContext context, User user) {
+    var avatarUrl = user.avatarUrl;
+
+    return new Container(
+      margin: new EdgeInsets.all(16.0),
+      child: new Row(
+        children: <Widget>[
+          new CircleAvatar(
+            radius: 40.0,
+            backgroundImage: new NetworkImage(avatarUrl),
+          ),
+          new Container(
+            margin: new EdgeInsets.all(16.0),
+            child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  new Text(
+                    user.name,
+                    style: Theme.of(context).textTheme.headline,
+                  ),
+                  new Text(
+                    user.login,
+                    style: Theme.of(context).textTheme.subhead,
+                  ),
+                  new Row(
+                    children: <Widget>[
+                      new Icon(Icons.location_city),
+                      new Text(user.company)
+                    ],
+                  ),
+                  new Row(
+                    children: <Widget>[
+                      new Icon(Icons.location_on),
+                      new Text(user.location)
+                    ],
+                  )
+                ]),
+          )
+        ],
+      ),
+    );
   }
 }
 
@@ -61,11 +137,11 @@ class AppScreenList extends StatelessWidget {
         }
     }
   }
-
-  Center _buildProgress() => new Center(child: new CircularProgressIndicator());
-
-  Center _buildError() => new Center(child: new Icon(Icons.error));
 }
+
+Center _buildProgress() => new Center(child: new CircularProgressIndicator());
+
+Center _buildError() => new Center(child: new Icon(Icons.error));
 
 class AppRepoList extends StatelessWidget {
   final List<Repo> repoList;
@@ -74,9 +150,11 @@ class AppRepoList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new ListView.builder(
-        itemBuilder: (context, index) => new AppRepoListTile(repoList[index]),
-        itemCount: repoList.length);
+    return new Flexible(
+      child: new ListView.builder(
+          itemBuilder: (context, index) => new AppRepoListTile(repoList[index]),
+          itemCount: repoList.length),
+    );
   }
 }
 
