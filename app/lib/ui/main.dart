@@ -43,7 +43,7 @@ class AppScreen extends StatelessWidget {
     return new ListTile(
       title: new Text(repo.name),
       leading: new CircleAvatar(
-        child: new Text(repo.name[0]),
+        child: new Text(repo.language[0]),
       ),
     );
   }
