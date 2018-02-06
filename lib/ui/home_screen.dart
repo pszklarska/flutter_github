@@ -5,19 +5,9 @@ import 'package:app/util/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-var restManager = new RestManager();
+final RestManager restManager = new RestManager();
 
 class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: Strings.APP_NAME,
-      home: new AppScreen(),
-    );
-  }
-}
-
-class AppScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -184,6 +174,11 @@ class AppRepoListTile extends StatelessWidget {
       leading: new CircleAvatar(
         child: new Text(repo.language[0]),
       ),
+      onTap: () => handleOnRepoTap(context, repo),
     );
+  }
+
+  void handleOnRepoTap(BuildContext context, Repo repo) {
+    Navigator.pushNamed(context, '/repo/${repo.id}');
   }
 }
