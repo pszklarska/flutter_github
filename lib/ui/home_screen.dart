@@ -33,23 +33,30 @@ class AppScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Column(
       children: <Widget>[
-        new FutureBuilder(
-          future: restManager.loadUser(),
-          builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-            return new ProfileHeader(snapshot);
-          },
-        ),
+        _buildProfileHeader(),
         new Divider(
           height: 3.0,
         ),
-        new FutureBuilder(
-            future: restManager.loadRepositories(),
-            builder:
-                (BuildContext context, AsyncSnapshot<List<Repo>> snapshot) {
-              return new AppScreenList(snapshot);
-            }),
+        _buildAppScreenList(),
       ],
     );
+  }
+
+  FutureBuilder<User> _buildProfileHeader() {
+    return new FutureBuilder(
+      future: restManager.loadUser(),
+      builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+        return new ProfileHeader(snapshot);
+      },
+    );
+  }
+
+  FutureBuilder<List<Repo>> _buildAppScreenList() {
+    return new FutureBuilder(
+        future: restManager.loadRepositories(),
+        builder: (BuildContext context, AsyncSnapshot<List<Repo>> snapshot) {
+          return new AppScreenList(snapshot);
+        });
   }
 }
 
@@ -83,34 +90,38 @@ class ProfileHeader extends StatelessWidget {
           ),
           new Container(
             margin: new EdgeInsets.all(16.0),
-            child: new Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  new Text(
-                    user.name,
-                    style: Theme.of(context).textTheme.headline,
-                  ),
-                  new Text(
-                    user.login,
-                    style: Theme.of(context).textTheme.subhead,
-                  ),
-                  new Row(
-                    children: <Widget>[
-                      new Icon(Icons.location_city),
-                      new Text(user.company)
-                    ],
-                  ),
-                  new Row(
-                    children: <Widget>[
-                      new Icon(Icons.location_on),
-                      new Text(user.location)
-                    ],
-                  )
-                ]),
+            child: _buildProfileInfo(user, context),
           )
         ],
       ),
     );
+  }
+
+  Column _buildProfileInfo(User user, BuildContext context) {
+    return new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          new Text(
+            user.name,
+            style: Theme.of(context).textTheme.headline,
+          ),
+          new Text(
+            user.login,
+            style: Theme.of(context).textTheme.subhead,
+          ),
+          new Row(
+            children: <Widget>[
+              new Icon(Icons.location_city),
+              new Text(user.company)
+            ],
+          ),
+          new Row(
+            children: <Widget>[
+              new Icon(Icons.location_on),
+              new Text(user.location)
+            ],
+          )
+        ]);
   }
 }
 
