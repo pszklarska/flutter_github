@@ -87,30 +87,35 @@ class ProfileHeader extends StatelessWidget {
   }
 
   Column _buildProfileInfo(User user, BuildContext context) {
+    List<Widget> headerItems = new List();
+    buildHeaderTextItem(user.name, headerItems, context);
+    buildHeaderTextItem(user.login, headerItems, context);
+    buildHeaderIconTextItem(
+        user.company, Icons.location_city, headerItems, context);
+    buildHeaderIconTextItem(
+        user.location, Icons.location_on, headerItems, context);
+
     return new Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          new Text(
-            user.name,
-            style: Theme.of(context).textTheme.headline,
-          ),
-          new Text(
-            user.login,
-            style: Theme.of(context).textTheme.subhead,
-          ),
-          new Row(
-            children: <Widget>[
-              new Icon(Icons.location_city),
-              new Text(user.company)
-            ],
-          ),
-          new Row(
-            children: <Widget>[
-              new Icon(Icons.location_on),
-              new Text(user.location)
-            ],
-          )
-        ]);
+        crossAxisAlignment: CrossAxisAlignment.start, children: headerItems);
+  }
+
+  void buildHeaderTextItem(
+      String text, List<Widget> headerItems, BuildContext context) {
+    if (text != null) {
+      headerItems.add(new Text(
+        text,
+        style: Theme.of(context).textTheme.headline,
+      ));
+    }
+  }
+
+  void buildHeaderIconTextItem(String text, IconData icon,
+      List<Widget> headerItems, BuildContext context) {
+    if (text != null) {
+      headerItems.add(new Row(
+        children: <Widget>[new Icon(icon), new Text(text)],
+      ));
+    }
   }
 }
 
@@ -178,6 +183,6 @@ class AppRepoListTile extends StatelessWidget {
   }
 
   void handleOnRepoTap(BuildContext context, Repo repo) {
-    Navigator.pushNamed(context, '/repo/${repo.id}');
+    Navigator.pushNamed(context, '/repo/${repo.name}');
   }
 }

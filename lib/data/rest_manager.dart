@@ -10,7 +10,7 @@ class RestManager {
   var httpClient = new HttpClient();
 
   Future<List<Repo>> loadRepositories() async {
-    var decodedJSON = await _getDecodedJson(Constants.API_GET_REPO_URL);
+    var decodedJSON = await _getDecodedJson(Constants.API_GET_REPOS_URL);
 
     List<Repo> repoList = new List<Repo>();
     for (var repoJSON in decodedJSON) {
@@ -18,6 +18,12 @@ class RestManager {
     }
 
     return repoList;
+  }
+
+  Future<Repo> loadRepository(String repoName) async {
+    var decodedJSON =
+        await _getDecodedJson(Constants.API_GET_REPO_URL + repoName);
+    return Repo.fromJson(decodedJSON);
   }
 
   Future<User> loadUser() async {
