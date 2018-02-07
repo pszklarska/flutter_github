@@ -1,12 +1,13 @@
+import 'package:app/data/rest_manager.dart';
 import 'package:app/ui/repo_screen.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/widgets.dart';
 
-void configureRoutes(Router router) {
-  router.define('/repo/:repoId', handler: new Handler(handlerFunc: buildRepoHandler()));
+void configureRoutes(Router router, RestManager restManager) {
+  router.define('/repo/:repoId', handler: new Handler(handlerFunc: buildRepoHandler(restManager)));
 }
 
-HandlerFunc buildRepoHandler() {
+HandlerFunc buildRepoHandler(RestManager restManager) {
   return (BuildContext context, Map<String, dynamic> params) =>
-      new RepoScreen(params['repoId']);
+      new RepoScreen(restManager, params['repoId']);
 }

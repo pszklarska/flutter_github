@@ -5,22 +5,21 @@ import 'package:app/util/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-final RestManager restManager = new RestManager();
-
 class HomeScreen extends StatelessWidget {
+  final RestManager restManager;
+
+  HomeScreen(this.restManager);
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
           title: new Text(Strings.APP_NAME),
         ),
-        body: new AppScreenBody());
+        body: _buildAppScreenBody());
   }
-}
 
-class AppScreenBody extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildAppScreenBody() {
     return new Column(
       children: <Widget>[
         _buildProfileHeader(),
