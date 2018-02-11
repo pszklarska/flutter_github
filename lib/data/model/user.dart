@@ -9,7 +9,7 @@ class User {
   User(this.id, this.login, this.name, this.avatarUrl, this.location,
       this.company);
 
-  static fromJson(json) {
+  factory User.fromJson(json) {
     if (json == null) {
       return null;
     } else {

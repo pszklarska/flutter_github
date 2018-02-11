@@ -1,5 +1,7 @@
+import 'package:app/data/model/event.dart';
 import 'package:app/data/model/repo.dart';
 import 'package:app/data/rest_manager.dart';
+import 'package:app/util/strings.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -37,23 +39,57 @@ class RepoScreen extends StatelessWidget {
       margin: new EdgeInsets.all(16.0),
       child: new Column(
         children: <Widget>[
-          new Text(repo.description, textAlign: TextAlign.center,),
-          new Padding(
-            padding: new EdgeInsets.only(top: 16.0),
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new HeaderItem("${repo.watchers}\nwatchers"),
-                new HeaderItem("${repo.openIssuesCount}\nopen issues"),
-                new HeaderItem("${repo.forksCount}\nforks"),
-              ],
-            ),
-          ),
+          _buildRepoDescription(repo),
+          _buildRepoStats(repo),
           new Divider(),
-
+          _createRepoEventsListBuilder()
         ],
       ),
     );
+  }
+
+  Widget _buildRepoDescription(Repo repo) {
+    return new Text(
+      repo.description,
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _buildRepoStats(Repo repo) {
+    return new Padding(
+      padding: new EdgeInsets.only(top: 16.0),
+      child: new Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new HeaderItem("${repo.watchers}\n" + Strings.WATCHERS),
+          new HeaderItem("${repo.openIssuesCount}\n" + Strings.OPEN_ISSUES),
+          new HeaderItem("${repo.forksCount}\n" + Strings.FORKS),
+        ],
+      ),
+    );
+  }
+
+  Widget _createRepoEventsListBuilder() {
+    return new FutureBuilder(
+        future: restManager.loadEvents(repoName),
+        builder: handleRepoEventsListState);
+  }
+
+  Widget handleRepoEventsListState(
+      BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
+    switch (snapshot.connectionState) {
+      case ConnectionState.active:
+      case ConnectionState.done:
+        List<Event> eventList = snapshot.data;
+        return _buildList(eventList);
+      default:
+        return new Container();
+    }
+  }
+
+  Widget _buildList(List<Event> eventList) {
+    //TODO
+    return new Container();
   }
 }
 

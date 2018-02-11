@@ -10,7 +10,7 @@ class Repo {
   const Repo(this.id, this.name, this.language, this.description, this.watchers,
       this.forksCount, this.openIssuesCount);
 
-  static fromJson(json) {
+  factory Repo.fromJson(json) {
     if (json == null) {
       return null;
     } else {
