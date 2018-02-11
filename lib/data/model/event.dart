@@ -39,20 +39,22 @@ enum EventType {
   PullRequestEvent,
   ForkEvent,
   IssueCommentEvent,
+  CreateEvent,
   Unknown
 }
 
 class EventPayload {
   final String action;
-  final int number;
+  final int size;
+  final String refType;
 
-  EventPayload(this.action, this.number);
+  EventPayload(this.action, this.size, this.refType);
 
   factory EventPayload.fromJson(json) {
     if (json == null) {
       return null;
     } else {
-      return new EventPayload(json['action'], json['number']);
+      return new EventPayload(json['action'], json['size'], json['ref_type']);
     }
   }
 }

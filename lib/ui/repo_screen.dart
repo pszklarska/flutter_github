@@ -1,6 +1,7 @@
 import 'package:app/data/model/event.dart';
 import 'package:app/data/model/repo.dart';
 import 'package:app/data/rest_manager.dart';
+import 'package:app/ui/event_list.dart';
 import 'package:app/util/strings.dart';
 import 'package:app/util/widgets.dart';
 import 'package:flutter/widgets.dart';
@@ -77,8 +78,7 @@ class RepoScreen extends StatelessWidget {
   }
 
   Widget _buildList(List<Event> eventList) {
-    //TODO
-    return new Container();
+    return new EventList(eventList);
   }
 }
 
