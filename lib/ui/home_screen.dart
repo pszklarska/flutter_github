@@ -2,6 +2,7 @@ import 'package:app/data/model/repo.dart';
 import 'package:app/data/model/user.dart';
 import 'package:app/data/rest_manager.dart';
 import 'package:app/util/strings.dart';
+import 'package:app/util/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -56,14 +57,9 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (snapshot.connectionState) {
-      case ConnectionState.active:
-      case ConnectionState.done:
-        User user = snapshot.data;
-        return _buildUserHeader(context, user);
-      default:
-        return new Container();
-    }
+    User user = snapshot.data;
+    return Widgets.returnWidgetOrEmpty(
+        snapshot, () => _buildUserHeader(context, user));
   }
 
   Widget _buildUserHeader(BuildContext context, User user) {
@@ -126,23 +122,10 @@ class AppScreenList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (snapshot.connectionState) {
-      case ConnectionState.none:
-      case ConnectionState.waiting:
-        return _buildProgress();
-      default:
-        if (snapshot.hasError) {
-          return _buildError();
-        } else {
-          return new AppRepoList(snapshot.data);
-        }
-    }
+    return Widgets.returnWidgetOrEmpty(
+        snapshot, () => new AppRepoList(snapshot.data));
   }
 }
-
-Center _buildProgress() => new Center(child: new CircularProgressIndicator());
-
-Center _buildError() => new Center(child: new Icon(Icons.error));
 
 class AppRepoList extends StatelessWidget {
   final List<Repo> repoList;

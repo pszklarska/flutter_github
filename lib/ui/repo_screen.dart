@@ -2,6 +2,7 @@ import 'package:app/data/model/event.dart';
 import 'package:app/data/model/repo.dart';
 import 'package:app/data/rest_manager.dart';
 import 'package:app/util/strings.dart';
+import 'package:app/util/widgets.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -24,14 +25,8 @@ class RepoScreen extends StatelessWidget {
 
   Widget _buildAppScreenBody(
       BuildContext context, AsyncSnapshot<Repo> snapshot) {
-    switch (snapshot.connectionState) {
-      case ConnectionState.active:
-      case ConnectionState.done:
-        Repo repo = snapshot.data;
-        return _buildRepoHeader(repo);
-      default:
-        return new Container();
-    }
+    Repo repo = snapshot.data;
+    return Widgets.returnWidgetOrEmpty(snapshot, () => _buildRepoHeader(repo));
   }
 
   Widget _buildRepoHeader(Repo repo) {
@@ -77,14 +72,8 @@ class RepoScreen extends StatelessWidget {
 
   Widget handleRepoEventsListState(
       BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
-    switch (snapshot.connectionState) {
-      case ConnectionState.active:
-      case ConnectionState.done:
-        List<Event> eventList = snapshot.data;
-        return _buildList(eventList);
-      default:
-        return new Container();
-    }
+    List<Event> eventList = snapshot.data;
+    return Widgets.returnWidgetOrEmpty(snapshot, () => _buildList(eventList));
   }
 
   Widget _buildList(List<Event> eventList) {
