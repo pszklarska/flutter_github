@@ -1,6 +1,7 @@
 import 'package:app/data/model/repo.dart';
 import 'package:app/data/model/user.dart';
 import 'package:app/data/rest_manager.dart';
+import 'package:app/ui/user_info_screen.dart';
 import 'package:app/util/strings.dart';
 import 'package:app/util/widgets.dart';
 import 'package:flutter/material.dart';
@@ -67,19 +68,27 @@ class ProfileHeader extends StatelessWidget {
 
     return new Container(
       margin: new EdgeInsets.all(16.0),
-      child: new Row(
-        children: <Widget>[
-          new CircleAvatar(
-            radius: 40.0,
-            backgroundImage: new NetworkImage(avatarUrl),
-          ),
-          new Container(
-            margin: new EdgeInsets.all(16.0),
-            child: _buildProfileInfo(user, context),
-          )
-        ],
+      child: new GestureDetector(
+        child: new Row(
+          children: <Widget>[
+            new CircleAvatar(
+              radius: 40.0,
+              backgroundImage: new NetworkImage(avatarUrl),
+            ),
+            new Container(
+              margin: new EdgeInsets.all(16.0),
+              child: _buildProfileInfo(user, context),
+            )
+          ],
+        ),
+        onTap: () => handleOnUserTap(context, user),
       ),
     );
+  }
+
+  void handleOnUserTap(BuildContext context, User user) {
+    Navigator.push(context,
+        new MaterialPageRoute(builder: (_) => new UserInfoScreen(user)));
   }
 
   Column _buildProfileInfo(User user, BuildContext context) {
