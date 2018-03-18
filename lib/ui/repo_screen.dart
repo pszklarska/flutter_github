@@ -67,7 +67,7 @@ class RepoScreen extends StatelessWidget {
 
   Widget _createRepoEventsListBuilder() {
     return new FutureBuilder(
-        future: restManager.loadEvents(repoName),
+        future: restManager.loadRepoEvents(repoName),
         builder: handleRepoEventsListState);
   }
 

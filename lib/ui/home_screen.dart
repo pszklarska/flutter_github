@@ -1,7 +1,7 @@
 import 'package:app/data/model/repo.dart';
 import 'package:app/data/model/user.dart';
 import 'package:app/data/rest_manager.dart';
-import 'package:app/ui/user_info_screen.dart';
+import 'package:app/ui/user_info/user_info_screen.dart';
 import 'package:app/util/strings.dart';
 import 'package:app/util/widgets.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +37,7 @@ class HomeScreen extends StatelessWidget {
     return new FutureBuilder(
       future: restManager.loadUser(),
       builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-        return new ProfileHeader(snapshot);
+        return new ProfileHeader(snapshot, restManager);
       },
     );
   }
@@ -53,8 +53,9 @@ class HomeScreen extends StatelessWidget {
 
 class ProfileHeader extends StatelessWidget {
   final AsyncSnapshot<User> snapshot;
+  final RestManager restManager;
 
-  ProfileHeader(this.snapshot);
+  ProfileHeader(this.snapshot, this.restManager);
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +89,8 @@ class ProfileHeader extends StatelessWidget {
 
   void handleOnUserTap(BuildContext context, User user) {
     Navigator.push(context,
-        new MaterialPageRoute(builder: (_) => new UserInfoScreen(user)));
+        new MaterialPageRoute(
+            builder: (_) => new UserInfoScreen (restManager, user)));
   }
 
   Column _buildProfileInfo(User user, BuildContext context) {
@@ -104,12 +106,15 @@ class ProfileHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start, children: headerItems);
   }
 
-  void buildHeaderTextItem(
-      String text, List<Widget> headerItems, BuildContext context) {
+  void buildHeaderTextItem(String text, List<Widget> headerItems,
+      BuildContext context) {
     if (text != null) {
       headerItems.add(new Text(
         text,
-        style: Theme.of(context).textTheme.headline,
+        style: Theme
+            .of(context)
+            .textTheme
+            .headline,
       ));
     }
   }
@@ -162,10 +167,10 @@ class AppRepoListTile extends StatelessWidget {
       title: new Text(repo.name),
       subtitle: repo.description != null
           ? new Text(
-              repo.description,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            )
+        repo.description,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      )
           : null,
       leading: new CircleAvatar(
         child: new Text(repo.language[0]),

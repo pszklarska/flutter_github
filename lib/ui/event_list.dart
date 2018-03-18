@@ -12,14 +12,18 @@ class EventList extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Flexible(
       child: new ListView.builder(
-          itemBuilder: _buildEventTile, itemCount: eventList.length),
+          itemBuilder: buildEventTile, itemCount: eventList.length),
     );
   }
 
-  Widget _buildEventTile(BuildContext context, int index) {
+  Widget buildEventTile(BuildContext context, int index) {
     Event event = eventList[index];
-    return new ListTile(
-        leading: new Icon(getIcon(event)), title: new Text(getTitle(event)));
+    return new Column(children: <Widget>[
+      new ListTile(
+          leading: new Icon(getIcon(event)),
+          title: new Text(getTitle(event.actor.login, event))),
+      new Divider()
+    ]);
   }
 
   IconData getIcon(Event event) {
@@ -42,30 +46,30 @@ class EventList extends StatelessWidget {
     }
   }
 
-  String getTitle(Event event) {
+  String getTitle(String actorName, Event event) {
     switch (event.type) {
       case EventType.ForkEvent:
-        return "${event.actor.login} "
+        return "$actorName "
             "${Strings.FORKED_REPO}";
       case EventType.IssueCommentEvent:
-        return "${event.actor.login} "
+        return "$actorName "
             "${event.payload.action} "
             "${Strings.COMMENT}";
       case EventType.PullRequestEvent:
-        return "${event.actor.login} "
+        return "$actorName "
             "${event.payload.action} "
             "${Strings.PULL_REQUEST}";
       case EventType.PushEvent:
-        return "${event.actor.login} "
+        return "$actorName "
             "${Strings.PUSHED} "
             "${event.payload.size} "
             "${Strings.COMMITS}";
       case EventType.WatchEvent:
-        return "${event.actor.login} "
+        return "$actorName "
             "${event.payload.action} "
             "${Strings.WATCHING_REPO}";
       case EventType.CreateEvent:
-        return "${event.actor.login} "
+        return "$actorName "
             "${Strings.CREATED} "
             "${event.payload.refType} ";
       case EventType.Unknown:
