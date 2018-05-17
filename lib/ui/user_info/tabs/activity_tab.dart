@@ -9,7 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ActivityTab extends ProfileTab {
-
   final RestManager restManager;
   final User user;
 
@@ -24,12 +23,11 @@ class ActivityTab extends ProfileTab {
   Widget _createActionsListBuilder(RestManager restManager, User user) {
     return new FutureBuilder(
         future: restManager.loadUserEvents(user.name),
-        builder: handleActionsListState
-    );
+        builder: handleActionsListState);
   }
 
-  Widget handleActionsListState(BuildContext context,
-      AsyncSnapshot<List<Event>> snapshot) {
+  Widget handleActionsListState(
+      BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
     List<Event> actionList = snapshot.data;
     return Widgets.returnWidgetOrEmpty(snapshot, () => _buildList(actionList));
   }
@@ -54,5 +52,4 @@ class ProfileEventList extends EventList {
     return new ListView.builder(
         itemBuilder: buildEventTile, itemCount: eventList.length);
   }
-
 }

@@ -1,6 +1,7 @@
 import 'package:app/data/model/repo.dart';
 import 'package:app/data/model/user.dart';
 import 'package:app/data/rest_manager.dart';
+import 'package:app/ui/app_repo_list.dart';
 import 'package:app/ui/user_info/user_info_screen.dart';
 import 'package:app/util/strings.dart';
 import 'package:app/util/widgets.dart';
@@ -88,9 +89,10 @@ class ProfileHeader extends StatelessWidget {
   }
 
   void handleOnUserTap(BuildContext context, User user) {
-    Navigator.push(context,
+    Navigator.push(
+        context,
         new MaterialPageRoute(
-            builder: (_) => new UserInfoScreen (restManager, user)));
+            builder: (_) => new UserInfoScreen(restManager, user)));
   }
 
   Column _buildProfileInfo(User user, BuildContext context) {
@@ -106,15 +108,12 @@ class ProfileHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start, children: headerItems);
   }
 
-  void buildHeaderTextItem(String text, List<Widget> headerItems,
-      BuildContext context) {
+  void buildHeaderTextItem(
+      String text, List<Widget> headerItems, BuildContext context) {
     if (text != null) {
       headerItems.add(new Text(
         text,
-        style: Theme
-            .of(context)
-            .textTheme
-            .headline,
+        style: Theme.of(context).textTheme.headline,
       ));
     }
   }
@@ -138,48 +137,5 @@ class AppScreenList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Widgets.returnWidgetOrEmpty(
         snapshot, () => new AppRepoList(snapshot.data));
-  }
-}
-
-class AppRepoList extends StatelessWidget {
-  final List<Repo> repoList;
-
-  AppRepoList(this.repoList);
-
-  @override
-  Widget build(BuildContext context) {
-    return new Flexible(
-      child: new ListView.builder(
-          itemBuilder: (context, index) => new AppRepoListTile(repoList[index]),
-          itemCount: repoList.length),
-    );
-  }
-}
-
-class AppRepoListTile extends StatelessWidget {
-  final Repo repo;
-
-  AppRepoListTile(this.repo);
-
-  @override
-  Widget build(BuildContext context) {
-    return new ListTile(
-      title: new Text(repo.name),
-      subtitle: repo.description != null
-          ? new Text(
-        repo.description,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      )
-          : null,
-      leading: new CircleAvatar(
-        child: new Text(repo.language[0]),
-      ),
-      onTap: () => handleOnRepoTap(context, repo),
-    );
-  }
-
-  void handleOnRepoTap(BuildContext context, Repo repo) {
-    Navigator.pushNamed(context, '/repo/${repo.name}');
   }
 }

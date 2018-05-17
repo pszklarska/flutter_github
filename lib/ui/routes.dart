@@ -10,5 +10,5 @@ void configureRoutes(Router router, RestManager restManager) {
 
 HandlerFunc buildRepoHandler(RestManager restManager) {
   return (BuildContext context, Map<String, dynamic> params) =>
-  new RepoScreen(restManager, params['repoName']);
+      new RepoScreen(restManager, params['repoName'][0]);
 }

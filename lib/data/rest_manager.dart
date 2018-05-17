@@ -23,7 +23,7 @@ class RestManager {
 
   Future<Repo> loadRepository(String repoName) async {
     var decodedJSON =
-    await _getDecodedJson(Constants.API_GET_REPO_URL + repoName);
+        await _getDecodedJson(Constants.API_GET_REPO_URL + repoName);
     return new Repo.fromJson(decodedJSON);
   }
 
@@ -34,7 +34,7 @@ class RestManager {
 
   Future<List<Event>> loadRepoEvents(String repoName) async {
     var decodedJSON =
-    await _getDecodedJson("/repos/pszklarska/$repoName/events");
+        await _getDecodedJson("/repos/pszklarska/$repoName/events");
     List<Event> eventList = new List<Event>();
     for (var eventJSON in decodedJSON) {
       eventList.add(new Event.fromJson(eventJSON));
@@ -51,6 +51,16 @@ class RestManager {
     }
 
     return eventList;
+  }
+
+  Future<List<Repo>> loadUserStarredRepos(String userName) async {
+    var decodedJSON = await _getDecodedJson("users/pszklarska/starred");
+    List<Repo> repoList = new List<Repo>();
+    for (var repoJSON in decodedJSON) {
+      repoList.add(new Repo.fromJson(repoJSON));
+    }
+
+    return repoList;
   }
 
   Future _getDecodedJson(String path) async {

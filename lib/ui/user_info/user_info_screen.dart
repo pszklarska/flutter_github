@@ -16,7 +16,7 @@ class UserInfoScreen extends StatelessWidget {
   UserInfoScreen(this.restManager, this.user) : tabs = <ProfileTab>[
     new InfoTab(user),
     new ActivityTab(restManager, user),
-    new StarredTab(user),
+    new StarredTab(restManager, user),
   ];
 
   @override

@@ -46,7 +46,7 @@ class RepoScreen extends StatelessWidget {
 
   Widget _buildRepoDescription(Repo repo) {
     return new Text(
-      repo.description,
+      repo.description ?? "",
       textAlign: TextAlign.center,
     );
   }
