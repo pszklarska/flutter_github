@@ -39,11 +39,6 @@ class AppRepoListTile extends StatelessWidget {
       leading: new CircleAvatar(
         child: new Text(repo.language != null ? repo.language[0] : "?"),
       ),
-      onTap: () => handleOnRepoTap(context, repo),
     );
-  }
-
-  void handleOnRepoTap(BuildContext context, Repo repo) {
-    Navigator.pushNamed(context, '/repo/${repo.name}');
   }
 }
