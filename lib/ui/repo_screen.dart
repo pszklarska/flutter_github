@@ -46,7 +46,7 @@ class RepoScreen extends StatelessWidget {
 
   Widget _buildRepoDescription(Repo repo) {
     return new Text(
-      repo.description,
+      repo.description ?? "",
       textAlign: TextAlign.center,
     );
   }
@@ -67,7 +67,7 @@ class RepoScreen extends StatelessWidget {
 
   Widget _createRepoEventsListBuilder() {
     return new FutureBuilder(
-        future: restManager.loadEvents(repoName),
+        future: restManager.loadRepoEvents(repoName),
         builder: handleRepoEventsListState);
   }
 

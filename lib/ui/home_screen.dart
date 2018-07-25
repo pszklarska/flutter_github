@@ -1,6 +1,8 @@
 import 'package:app/data/model/repo.dart';
 import 'package:app/data/model/user.dart';
 import 'package:app/data/rest_manager.dart';
+import 'package:app/ui/app_repo_list.dart';
+import 'package:app/ui/user_info/user_info_screen.dart';
 import 'package:app/util/strings.dart';
 import 'package:app/util/widgets.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +38,7 @@ class HomeScreen extends StatelessWidget {
     return new FutureBuilder(
       future: restManager.loadUser(),
       builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-        return new ProfileHeader(snapshot);
+        return new ProfileHeader(snapshot, restManager);
       },
     );
   }
@@ -52,8 +54,9 @@ class HomeScreen extends StatelessWidget {
 
 class ProfileHeader extends StatelessWidget {
   final AsyncSnapshot<User> snapshot;
+  final RestManager restManager;
 
-  ProfileHeader(this.snapshot);
+  ProfileHeader(this.snapshot, this.restManager);
 
   @override
   Widget build(BuildContext context) {
@@ -67,19 +70,29 @@ class ProfileHeader extends StatelessWidget {
 
     return new Container(
       margin: new EdgeInsets.all(16.0),
-      child: new Row(
-        children: <Widget>[
-          new CircleAvatar(
-            radius: 40.0,
-            backgroundImage: new NetworkImage(avatarUrl),
-          ),
-          new Container(
-            margin: new EdgeInsets.all(16.0),
-            child: _buildProfileInfo(user, context),
-          )
-        ],
+      child: new GestureDetector(
+        child: new Row(
+          children: <Widget>[
+            new CircleAvatar(
+              radius: 40.0,
+              backgroundImage: new NetworkImage(avatarUrl),
+            ),
+            new Container(
+              margin: new EdgeInsets.all(16.0),
+              child: _buildProfileInfo(user, context),
+            )
+          ],
+        ),
+        onTap: () => handleOnUserTap(context, user),
       ),
     );
+  }
+
+  void handleOnUserTap(BuildContext context, User user) {
+    Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (_) => new UserInfoScreen(restManager, user)));
   }
 
   Column _buildProfileInfo(User user, BuildContext context) {
@@ -124,48 +137,5 @@ class AppScreenList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Widgets.returnWidgetOrEmpty(
         snapshot, () => new AppRepoList(snapshot.data));
-  }
-}
-
-class AppRepoList extends StatelessWidget {
-  final List<Repo> repoList;
-
-  AppRepoList(this.repoList);
-
-  @override
-  Widget build(BuildContext context) {
-    return new Flexible(
-      child: new ListView.builder(
-          itemBuilder: (context, index) => new AppRepoListTile(repoList[index]),
-          itemCount: repoList.length),
-    );
-  }
-}
-
-class AppRepoListTile extends StatelessWidget {
-  final Repo repo;
-
-  AppRepoListTile(this.repo);
-
-  @override
-  Widget build(BuildContext context) {
-    return new ListTile(
-      title: new Text(repo.name),
-      subtitle: repo.description != null
-          ? new Text(
-              repo.description,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            )
-          : null,
-      leading: new CircleAvatar(
-        child: new Text(repo.language[0]),
-      ),
-      onTap: () => handleOnRepoTap(context, repo),
-    );
-  }
-
-  void handleOnRepoTap(BuildContext context, Repo repo) {
-    Navigator.pushNamed(context, '/repo/${repo.name}');
   }
 }

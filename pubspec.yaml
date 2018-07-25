@@ -5,6 +5,7 @@ dependencies:
   flutter:
     sdk: flutter
   fluro: "^1.2.1"
+  url_launcher: "2.0.2"
 
 dev_dependencies:
   flutter_test:

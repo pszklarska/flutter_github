@@ -10,4 +10,12 @@ class Strings {
   static const String COMMITS = "commit(s)";
   static const String WATCHING_REPO = "watching repo";
   static const String CREATED = "created";
+  //Profile info
+  static const String INFO_TAB = "Info";
+  static const String ACTIVITY_TAB = "Activity";
+  static const String STARRED_TAB = "Starred";
+  static const String EMAIL = "Email";
+  static const String BLOG = "Blog";
+  static const String LOCATION = "Location";
+  static const String WORK = "Work";
 }
